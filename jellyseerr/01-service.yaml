@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: jellyseerr-service
+  namespace: media
+spec:
+  selector:
+    app: jellyseerr
+  ports:
+  - port: 5055
+    targetPort: 5055
+    name: web
+  type: ClusterIP

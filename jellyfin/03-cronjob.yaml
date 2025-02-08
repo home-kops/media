@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: jellyfin-backup
+  namespace: media
+spec:
+  schedule: "0 15 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: jellyfin-backup
+            image: busybox
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              echo "Starting backup at $(date)"
+              tar -czf /backup/jellyfin-$(date +%Y%m%d%H%M%S).tar.gz /config
+              echo "Backup completed at $(date)"
+              echo "Removing backups older than 3 days"
+              find /backup -maxdepth 1 -mtime +3 -type f -delete
+            volumeMounts:
+            - name: backup
+              mountPath: /backup
+            - name: config
+              mountPath: /config
+          restartPolicy: OnFailure
+          volumes:
+          - name: config
+            nfs:
+              server: ${NFS_SERVER}
+              path: /volume1/kubernetes/config/jellyfin
+          - name: backup
+            nfs:
+              server: ${NFS_SERVER}
+              path: /volume1/kubernetes/backup/jellyfin

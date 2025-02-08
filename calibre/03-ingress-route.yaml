@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: calibre-ingress
+  namespace: media
+spec:
+  entryPoints:
+  - websecure
+  - web
+  routes:
+  - match: Host(`calibre.${DOMAIN}`)
+    kind: Rule
+    services:
+    - kind: Service
+      name: calibre-service
+      port: web
