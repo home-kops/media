@@ -10,6 +10,6 @@ The project conists of several components:
 - Jellyseerr
 - More to come
 
-## Networking
+## Ingress
 
-The network makes use of Traefik. All these applications are behind a Traefik reverse proxy.
+All these applications are behind a Traefik reverse proxy using the Ingress route resource.
