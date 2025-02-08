@@ -17,11 +17,11 @@ spec:
     spec:
       containers:
       - name: jellyseerr
-        image: fallenbagel/jellyseerr
+        image: fallenbagel/jellyseerr:2.3.0
+        imagePullPolicy: IfNotPresent
         ports:
         - name: web
           containerPort: 5055
-        env:
         volumeMounts:
         - name: config
           mountPath: /app/config

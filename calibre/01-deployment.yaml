@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
       - name: calibre
-        image: msd117/librarium
+        image: msd117/librarium:1.0.0
+        imagePullPolicy: IfNotPresent
         ports:
         - name: web
           containerPort: 8080

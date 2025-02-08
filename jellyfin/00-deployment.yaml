@@ -19,18 +19,18 @@ spec:
         app: jellyfin
     spec:
       containers:
-      - env:
+        name: jellyfin
+        image: ghcr.io/linuxserver/jellyfin:10.10.5
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true # Container must run as privileged inside of the pod, required for hardware acceleration
+        env:
         - name: PUID
           value: "1000"
         - name: PGID
           value: "100"
         - name: TZ
           value: Europe/Amsterdam
-        securityContext:
-          privileged: true # Container must run as privileged inside of the pod, required for hardware acceleration
-        image: ghcr.io/linuxserver/jellyfin
-        imagePullPolicy: IfNotPresent
-        name: jellyfin
         ports:
         - containerPort: 8096
           name: http-tcp
