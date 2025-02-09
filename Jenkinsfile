@@ -36,27 +36,27 @@ podTemplate(
             dir('calibre') {
               sh '''
                 envsubst < 00-secret.yaml | kubectl apply -f - --dry-run=server && \
-                envsubst < 01-deployment.yaml | kubectl apply -f - --dry-run=server && \
-                kubectl apply -f 02-service.yaml --dry-run=server && \
-                envsubst < 03-ingress-route.yaml | kubectl apply -f - --dry-run=server
+                  envsubst < 01-deployment.yaml | kubectl apply -f - --dry-run=server && \
+                  kubectl apply -f 02-service.yaml --dry-run=server && \
+                  envsubst < 03-ingress-route.yaml | kubectl apply -f - --dry-run=server
               '''
             }
           }
 
           dir('jellyfin') {
             sh '''
-              envsubst < 00-deployment.yaml | kubectl apply -f - --dry-run=server
-              kubectl apply -f 01-service.yaml --dry-run=server
-              envsubst < 02-ingress-route.yaml | kubectl apply -f - --dry-run=server
-              envsubst < 03-cronjob.yaml | kubectl apply -f - --dry-run=server
+              envsubst < 00-deployment.yaml | kubectl apply -f - --dry-run=server && \
+                kubectl apply -f 01-service.yaml --dry-run=server && \
+                envsubst < 02-ingress-route.yaml | kubectl apply -f - --dry-run=server && \
+                envsubst < 03-cronjob.yaml | kubectl apply -f - --dry-run=server
             '''
           }
 
           dir('jellyseerr') {
             sh '''
-              envsubst < 00-deployment.yaml | kubectl apply -f - --dry-run=server
-              kubectl apply -f 01-service.yaml --dry-run=server
-              envsubst < 02-ingress-route.yaml | kubectl apply -f - --dry-run=server
+              envsubst < 00-deployment.yaml | kubectl apply -f - --dry-run=server && \
+                kubectl apply -f 01-service.yaml --dry-run=server && \
+                envsubst < 02-ingress-route.yaml | kubectl apply -f - --dry-run=server
             '''
           }
         }
@@ -75,27 +75,27 @@ podTemplate(
             dir('calibre') {
               sh '''
                 envsubst < 00-secret.yaml | kubectl apply -f - && \
-                envsubst < 01-deployment.yaml | kubectl apply -f - && \
-                kubectl apply -f 02-service.yaml && \
-                envsubst < 03-ingress-route.yaml | kubectl apply -f -
+                  envsubst < 01-deployment.yaml | kubectl apply -f - && \
+                  kubectl apply -f 02-service.yaml && \
+                  envsubst < 03-ingress-route.yaml | kubectl apply -f -
               '''
             }
           }
 
           dir('jellyfin') {
             sh '''
-              envsubst < 00-deployment.yaml | kubectl apply -f -
-              kubectl apply -f 01-service.yaml
-              envsubst < 02-ingress-route.yaml | kubectl apply -f -
-              envsubst < 03-cronjob.yaml | kubectl apply -f -
+              envsubst < 00-deployment.yaml | kubectl apply -f - && \
+                kubectl apply -f 01-service.yaml && \
+                envsubst < 02-ingress-route.yaml | kubectl apply -f - && \
+                envsubst < 03-cronjob.yaml | kubectl apply -f -
             '''
           }
 
           dir('jellyseerr') {
             sh '''
-              envsubst < 00-deployment.yaml | kubectl apply -f -
-              kubectl apply -f 01-service.yaml
-              envsubst < 02-ingress-route.yaml | kubectl apply -f -
+              envsubst < 00-deployment.yaml | kubectl apply -f - && \
+                kubectl apply -f 01-service.yaml && \
+                envsubst < 02-ingress-route.yaml | kubectl apply -f -
             '''
           }
         }
