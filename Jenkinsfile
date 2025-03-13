@@ -51,14 +51,6 @@ podTemplate(
                 envsubst < 03-cronjob.yaml | kubectl apply -f - --dry-run=server
             '''
           }
-
-          dir('jellyseerr') {
-            sh '''
-              envsubst < 00-deployment.yaml | kubectl apply -f - --dry-run=server && \
-                kubectl apply -f 01-service.yaml --dry-run=server && \
-                envsubst < 02-ingress-route.yaml | kubectl apply -f - --dry-run=server
-            '''
-          }
         }
       }
     }
@@ -88,14 +80,6 @@ podTemplate(
                 kubectl apply -f 01-service.yaml && \
                 envsubst < 02-ingress-route.yaml | kubectl apply -f - && \
                 envsubst < 03-cronjob.yaml | kubectl apply -f -
-            '''
-          }
-
-          dir('jellyseerr') {
-            sh '''
-              envsubst < 00-deployment.yaml | kubectl apply -f - && \
-                kubectl apply -f 01-service.yaml && \
-                envsubst < 02-ingress-route.yaml | kubectl apply -f -
             '''
           }
         }
