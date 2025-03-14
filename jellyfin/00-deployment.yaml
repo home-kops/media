@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: jellyfin
-        image: ghcr.io/linuxserver/jellyfin:10.10.5
+        image: ghcr.io/linuxserver/jellyfin:10.10.6
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true # Container must run as privileged inside of the pod, required for hardware acceleration
