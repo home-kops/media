@@ -3,9 +3,13 @@ podTemplate(
   containers: [
     containerTemplate(
       name: 'jnlp',
-      image: 'msd117/jenkins-generic-agent',
+      image: 'msd117/jenkins-generic-agent:latest',
       ttyEnabled: true
     )
+  ],
+  envVars: [
+    containerEnvVar(key: 'CALIBRE_VERSION', value: '1.0.0'),
+    containerEnvVar(key: 'JELLYFIN_VERSION', value: '10.10.6')
   ],
   namespace: 'devops-tools'
 ) {
@@ -18,39 +22,17 @@ podTemplate(
       }
     }
 
-    stage('Deploy common media files') {
-      container('jnlp') {
-        sh 'kubectl apply -f ./common'
-      }
-    }
-
     stage('Verify') {
       container('jnlp') {
         withCredentials(
           [
+            string(credentialsId: 'server1-domain', variable: 'DOMAIN'),
             string(credentialsId: 'nfs1-server', variable: 'NFS_SERVER'),
-            string(credentialsId: 'server1-domain', variable: 'DOMAIN')
+            string(credentialsId: 'calibre-password', variable: 'CALIBRE_PASSWORD')
           ]
         ) {
-          withCredentials([string(credentialsId: 'calibre-password', variable: 'CALIBRE_PASSWORD')]) {
-            dir('calibre') {
-              sh '''
-                envsubst < 00-secret.yaml | kubectl apply -f - --dry-run=server && \
-                  envsubst < 01-deployment.yaml | kubectl apply -f - --dry-run=server && \
-                  kubectl apply -f 02-service.yaml --dry-run=server && \
-                  envsubst < 03-ingress-route.yaml | kubectl apply -f - --dry-run=server
-              '''
-            }
-          }
-
-          dir('jellyfin') {
-            sh '''
-              envsubst < 00-deployment.yaml | kubectl apply -f - --dry-run=server && \
-                kubectl apply -f 01-service.yaml --dry-run=server && \
-                envsubst < 02-ingress-route.yaml | kubectl apply -f - --dry-run=server && \
-                envsubst < 03-cronjob.yaml | kubectl apply -f - --dry-run=server
-            '''
-          }
+          // Run the deploy script dry-run mode to validate the resources
+          sh './tooling/deploy -d'
         }
       }
     }
@@ -59,29 +41,12 @@ podTemplate(
       container('jnlp') {
         withCredentials(
           [
+            string(credentialsId: 'server1-domain', variable: 'DOMAIN'),
             string(credentialsId: 'nfs1-server', variable: 'NFS_SERVER'),
-            string(credentialsId: 'server1-domain', variable: 'DOMAIN')
+            string(credentialsId: 'calibre-password', variable: 'CALIBRE_PASSWORD')
           ]
         ) {
-          withCredentials([string(credentialsId: 'calibre-password', variable: 'CALIBRE_PASSWORD')]) {
-            dir('calibre') {
-              sh '''
-                envsubst < 00-secret.yaml | kubectl apply -f - && \
-                  envsubst < 01-deployment.yaml | kubectl apply -f - && \
-                  kubectl apply -f 02-service.yaml && \
-                  envsubst < 03-ingress-route.yaml | kubectl apply -f -
-              '''
-            }
-          }
-
-          dir('jellyfin') {
-            sh '''
-              envsubst < 00-deployment.yaml | kubectl apply -f - && \
-                kubectl apply -f 01-service.yaml && \
-                envsubst < 02-ingress-route.yaml | kubectl apply -f - && \
-                envsubst < 03-cronjob.yaml | kubectl apply -f -
-            '''
-          }
+          sh './tooling/deploy'
         }
       }
     }

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: calibre
-        image: msd117/librarium:1.0.0
+        image: msd117/librarium:${CALIBRE_VERSION}
         imagePullPolicy: IfNotPresent
         ports:
         - name: web
