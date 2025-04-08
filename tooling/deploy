@@ -27,9 +27,9 @@ echo -e "\nDeploying Calibre..."
 calibre_dir="${project_path}/calibre"
 
 # Replace env variables
-envsubst <"${calibre_dir}"/00-secret.yaml >"${calibre_dir}"/00-secret.yaml
-envsubst <"${calibre_dir}"/01-deployment.yaml >"${calibre_dir}"/01-deployment.yaml
-envsubst <"${calibre_dir}"/03-ingress-route.yaml >"${calibre_dir}"/03-ingress-route.yaml
+envsubst <"${calibre_dir}"/00-secret.yaml | sponge "${calibre_dir}"/00-secret.yaml
+envsubst <"${calibre_dir}"/01-deployment.yaml | sponge "${calibre_dir}"/01-deployment.yaml
+envsubst <"${calibre_dir}"/03-ingress-route.yaml | sponge "${calibre_dir}"/03-ingress-route.yaml
 
 kubectl apply -f "${calibre_dir}" --dry-run="${dry_run_mode}"
 echo -e "Done!\n"
@@ -39,9 +39,9 @@ echo -e "\nDeploying Jellyfin..."
 jellyfin_dir="${project_path}/jellyfin"
 
 # Replace env variables
-envsubst <"${jellyfin_dir}"/00-deployment.yaml >"${jellyfin_dir}"/00-deployment.yaml
-envsubst <"${jellyfin_dir}"/02-ingress-route.yaml >"${jellyfin_dir}"/02-ingress-route.yaml
-envsubst <"${jellyfin_dir}"/03-cronjob.yaml >"${jellyfin_dir}"/03-cronjob.yaml
+envsubst <"${jellyfin_dir}"/00-deployment.yaml | sponge "${jellyfin_dir}"/00-deployment.yaml
+envsubst <"${jellyfin_dir}"/02-ingress-route.yaml | sponge "${jellyfin_dir}"/02-ingress-route.yaml
+envsubst <"${jellyfin_dir}"/03-cronjob.yaml | sponge "${jellyfin_dir}"/03-cronjob.yaml
 
 kubectl apply -f "${jellyfin_dir}" --dry-run="${dry_run_mode}"
 echo -e "Done!\n"
