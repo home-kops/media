@@ -1,12 +1,14 @@
 #!/bin/bash
 
-dry_run=""
+set -eu
+
+dry_run_mode="none"
 
 while getopts "d" flag; do
     case $flag in
     d)
         echo "Running dry-run mode..."
-        dry_run="--dry-run=server"
+        dry_run_mode="server"
         ;;
     \?)
         echo "Wrong argument"
@@ -18,7 +20,7 @@ done
 project_path="$(git rev-parse --show-toplevel)"
 
 # Deploy common resources
-kubectl apply -f "${project_path}"/common "${dry_run}"
+kubectl apply -f "${project_path}"/common --dry-run="${dry_run_mode}"
 
 # Calibre
 echo -e "\nDeploying Calibre..."
@@ -29,7 +31,7 @@ envsubst <"${calibre_dir}"/00-secret.yaml >"${calibre_dir}"/00-secret.yaml
 envsubst <"${calibre_dir}"/01-deployment.yaml >"${calibre_dir}"/01-deployment.yaml
 envsubst <"${calibre_dir}"/03-ingress-route.yaml >"${calibre_dir}"/03-ingress-route.yaml
 
-kubectl apply -f "${calibre_dir}" "${dry_run}"
+kubectl apply -f "${calibre_dir}" --dry-run="${dry_run_mode}"
 echo -e "Done!\n"
 
 # Jellyfin
@@ -41,5 +43,5 @@ envsubst <"${jellyfin_dir}"/00-deployment.yaml >"${jellyfin_dir}"/00-deployment.
 envsubst <"${jellyfin_dir}"/02-ingress-route.yaml >"${jellyfin_dir}"/02-ingress-route.yaml
 envsubst <"${jellyfin_dir}"/03-cronjob.yaml >"${jellyfin_dir}"/03-cronjob.yaml
 
-kubectl apply -f "${jellyfin_dir}" "${dry_run}"
+kubectl apply -f "${jellyfin_dir}" --dry-run="${dry_run_mode}"
 echo -e "Done!\n"
