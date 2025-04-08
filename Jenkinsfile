@@ -3,7 +3,7 @@ podTemplate(
   containers: [
     containerTemplate(
       name: 'jnlp',
-      image: 'msd117/jenkins-generic-agent:latest',
+      image: 'msd117/jenkins-generic-agent:1.1.2-bookworm-jdk21',
       ttyEnabled: true
     )
   ],
