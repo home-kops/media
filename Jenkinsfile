@@ -27,8 +27,7 @@ podTemplate(
         withCredentials(
           [
             string(credentialsId: 'server1-domain', variable: 'DOMAIN'),
-            string(credentialsId: 'nfs1-server', variable: 'NFS_SERVER'),
-            string(credentialsId: 'calibre-password', variable: 'CALIBRE_PASSWORD')
+            string(credentialsId: 'nfs1-server', variable: 'NFS_SERVER')
           ]
         ) {
           // Run the deploy script dry-run mode to validate the resources
@@ -42,8 +41,7 @@ podTemplate(
         withCredentials(
           [
             string(credentialsId: 'server1-domain', variable: 'DOMAIN'),
-            string(credentialsId: 'nfs1-server', variable: 'NFS_SERVER'),
-            string(credentialsId: 'calibre-password', variable: 'CALIBRE_PASSWORD')
+            string(credentialsId: 'nfs1-server', variable: 'NFS_SERVER')
           ]
         ) {
           sh './tooling/deploy'

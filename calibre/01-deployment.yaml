@@ -28,12 +28,15 @@ spec:
         - name: PGID
           value: "100"
         - name: CUSTOM_USER
-          value: "calibre"
+          valueFrom:
+            secretKeyRef:
+              name: calibre-secrets
+              key: calibre-ui-username
         - name: PASSWORD
           valueFrom:
             secretKeyRef:
               name: calibre-secrets
-              key: CALIBRE_PASSWORD
+              key: calibre-ui-password
         volumeMounts:
         - name: config
           mountPath: /config
