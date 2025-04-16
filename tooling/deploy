@@ -20,7 +20,12 @@ done
 project_path="$(git rev-parse --show-toplevel)"
 
 # Deploy common resources
-kubectl apply -f "${project_path}"/common --dry-run="${dry_run_mode}"
+echo -e "\nDeploying common resources..."
+common_dir="${project_path}/common"
+
+# Deploy namespace
+kubectl apply -f "${common_dir}"/namespace.yaml
+echo -e "Done!\n"
 
 # Calibre
 echo -e "\nDeploying Calibre..."
