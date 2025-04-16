@@ -24,7 +24,7 @@ echo -e "\nDeploying common resources..."
 common_dir="${project_path}/common"
 
 # Deploy namespace
-kubectl apply -f "${common_dir}"/namespace.yaml
+kubectl apply -f "${common_dir}"/00-namespace.yaml
 echo -e "Done!\n"
 
 # Calibre
